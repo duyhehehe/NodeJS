@@ -2,6 +2,7 @@ const path = require('path');
 const express = require('express');
 const morgan = require('morgan');
 const {engine} = require('express-handlebars');
+const methodOverride=require('method-override');
 const route = require('./routes');
 const db = require('./config/db');
 db.connect();
@@ -21,10 +22,15 @@ app.use(
 
 app.use(express.json());
 
+app.use(methodOverride('_method'))
+
 app.engine(
     'hbs',
     engine({
         extname: '.hbs',
+        helpers: {
+            sum: (a, b) => a + b,
+        },
     }),
 );
 app.set('view engine', 'hbs');
